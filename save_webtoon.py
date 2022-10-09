@@ -33,6 +33,7 @@ def naver(data):
         
         temp = []
         temp.append(imageTag.get('title'))
+        # 웹툰ID는 웹툰 링크에서 추출한다.
         temp.append(titleTag.get('href').split("titleId=")[1].split("&")[0])
         temp.append(titleTag.get('href'))
         temp.append(imageTag.get('src'))
