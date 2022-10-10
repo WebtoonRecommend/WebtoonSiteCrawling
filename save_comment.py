@@ -15,8 +15,9 @@ con = sqlite3.connect('./test.db')
 cur = con.cursor()
 # con.execute("DROP TABLE IF EXISTS webtoon_comment")
 # comment url에 필요한 웹툰ID를 가져온다.
-data_from_db = pd.read_sql("SELECT * FROM webtoon_info", con, index_col=None)
-
+webtooninfo_from_db = pd.read_sql("SELECT * FROM webtoon_info", con, index_col=None)
+comment_from_db = pd.read_sql("SELECT * FROM webtoon_comment", con, index_col=None)
+comments = comment_from_db['웹툰ID'].drop_duplicates
 
 
 
@@ -58,7 +59,10 @@ def collector(sql, id, wtitle, k):
 drivers=deque()
 # webtoon_comment table INSERT문 양식
 sql = "INSERT INTO webtoon_comment VALUES(?,?,?,?,?,?,?)"
-for id,wtitle,j in zip(data_from_db['웹툰ID'][248:], data_from_db['이름'][248:], data_from_db['회차'][248:]):
+for id,wtitle,j in zip(webtooninfo_from_db['웹툰ID'][:], webtooninfo_from_db['이름'][:], webtooninfo_from_db['회차'][:]):
+    if id in comments:
+        continue
+    
     j = int(j)
     if j<10:
         # 총 회차가 9개 이하라면 모든 회차에서 댓글을 가져온다.
