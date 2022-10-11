@@ -17,8 +17,9 @@ cur = con.cursor()
 # comment url에 필요한 웹툰ID를 가져온다.
 webtooninfo_from_db = pd.read_sql("SELECT * FROM webtoon_info", con, index_col=None)
 comment_from_db = pd.read_sql("SELECT * FROM webtoon_comment", con, index_col=None)
-comments = comment_from_db['웹툰ID'].drop_duplicates
-
+comments = set(comment_from_db['웹툰ID'])
+r18 = webtooninfo_from_db.loc[webtooninfo_from_db['이용가']=='18세 이용가',['웹툰ID']]
+# print(['670143'] in r18.values)
 
 
 def collector(sql, id, wtitle, k):
@@ -60,7 +61,7 @@ drivers=deque()
 # webtoon_comment table INSERT문 양식
 sql = "INSERT INTO webtoon_comment VALUES(?,?,?,?,?,?,?)"
 for id,wtitle,j in zip(webtooninfo_from_db['웹툰ID'][:], webtooninfo_from_db['이름'][:], webtooninfo_from_db['회차'][:]):
-    if id in comments:
+    if id in comments or [id] in r18.values:
         continue
     
     j = int(j)
