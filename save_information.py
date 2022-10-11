@@ -14,7 +14,7 @@ webtooninfo_from_db = pd.read_sql("SELECT * FROM webtoon_info", con, index_col=N
 
 # dataFrame 생성
 data = pd.DataFrame(data=[], columns=['웹툰ID','이름','작가','설명','장르','이용가','썸네일','회차'])
-
+print('783518' in list(webtooninfo_from_db['웹툰ID']))
 
 
 def naver(data, id):
@@ -65,7 +65,7 @@ def naver(data, id):
 
 # 웹툰 상세정보를 dataFrame에 저장한다.
 for id in webtoon_from_db['웹툰ID'][:]:
-    if id in webtooninfo_from_db['웹툰ID']:
+    if id in list(webtooninfo_from_db['웹툰ID']):
         continue
     data = naver(data, id)
 
